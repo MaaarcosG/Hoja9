@@ -36,7 +36,7 @@ public class Main {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("./src"));
 		chooser.setDialogTitle("Seleccione el archivo que desea");
-		chooser.setFileFilter(new FileNameExtensionFilter("Text files (.txt", "txt"));
+		chooser.setFileFilter(new FileNameExtensionFilter("DIC (.dic", "dic"));
 
 		int valor = chooser.showOpenDialog(null);
 		if(valor == JFileChooser.APPROVE_OPTION) {
@@ -69,7 +69,7 @@ public class Main {
         teclado.nextLine();
         JFileChooser chooser2 = new JFileChooser(System.getProperty("java.class.path"));
         chooser2.setDialogTitle("Seleccione su archivo");
-        chooser2.setFileFilter(new FileNameExtensionFilter("Text files (.txt)", "txt"));
+        chooser2.setFileFilter(new FileNameExtensionFilter("Text  (.txt)", "txt"));
         int returnVal2 = chooser2.showOpenDialog(null);
         if(returnVal2 == JFileChooser.APPROVE_OPTION) {
             try {
