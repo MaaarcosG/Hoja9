@@ -9,99 +9,161 @@
  * @link https://algorithms.tutorialhorizon.com/binary-search-tree-complete-implementation/
  * @link https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/
  */
-public class BinaryTree<K extends Comparable<K>, V> {
-	/*le damos valor al nodo*/
-	public Node<K,V> root;
+public class BinaryTree<E>
+{
 	
-	/*Constructor de la clase BinaryTree*/
-	public BinaryTree() {
-		this.root = null;
-	}
-	
-	/**
-	 * @param key
-	 * @return
-	 * Busca si hay una llave dentro del arbol, si encuentre de vuelve valor de llave
-	 */
-	public V find(K key) {
-		Node<K,V> data = root;
-		/*Ciclo para recorrer lso datos de la raiz*/
-		while(data != null) {
-			/*Compara las palabras con la llave*/
-			int comparation = data.datos.compareTo(key);
-			if(comparation == 0) {
-				return data.datos.getValue();
-			} else if(comparation > 0) {
-				/*datos de la */
-				data = data.left;
-			} else {
-				data = data.right;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Agreaga nuevos vertices al arbol
-	 * @param key
-	 * @param value
-	 */
-	public void insert(K key, V value) {
-		/*Nuevos nodos para la evaluacion*/
-		Node<K,V> nNode = new Node<K,V>(key, value);
-		if(root == null) {
-			root = nNode;
-			return;
-		}
-		
-		Node<K,V> data = root;
-		Node<K,V> parent = null;
-		/*Ciclo para recorrer el arbol*/
-		while(true) {
-			parent = data;
-			int comparation = data.datos.compareTo(key);
-			if(comparation > 0) {
-				data = data.left;
-				if(data == null) {
-					parent.left = nNode;
-					return;
-				}
-			} else {
-				data = data.right;
-				if(data == null) {
-					parent.right = nNode;
-					return;
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Metodo para recorrer el arbol binario
-	 * @param root
-	 */
-	public void display(Node<K,V> root) {
-		if(root != null) {
-			display(root.left);
-			System.out.print(root.datos.toString());
-			display(root.right);
-		}
-	}
-	
-/*Clase Nodos modificada para la asociacion entre palabras
- * @param <K>
- * @param <V>
- */
-class Node<K extends Comparable<K>,V>{
-	Association<K,V> datos;
-	Node<K,V> left;
-	Node<K,V> right;
-	
-	/*Clase para la asociacion*/
-	public Node(K key, V value) {
-		datos = new Association<K,V>(key, value);
-		left = null;
-		right = null;
-	}
-}
+    protected E valor;
+    protected BinaryTree<E> parent, left, right;
+    
+    //Constructor del arbol
+    public BinaryTree()
+    {
+        valor = null;
+        parent = null;
+        left = null;
+        right = null;
+    }
+    
+    public BinaryTree(E valor)
+    {
+        this.valor = valor;
+        setLeft(new BinaryTree<>());
+        setRight(new BinaryTree<>());
+    }
+    
+    public BinaryTree(E valor, BinaryTree<E> left, BinaryTree<E> right)
+    {
+        this(valor);
+        if(left != null) {
+        	setLeft(left); 
+        }
+        if(right != null) {
+        	setRight(right);
+        }
+    }
+    
+    public boolean hijoIzq()
+    {
+        if(parent == null)
+        {
+        	return false;
+        }
+        else {
+        	BinaryTree left = parent.left();
+            return this == left;
+        }
+        
+    }
+    
+    
+    //Esta función nos ayuda a saber si el nodo tiene hijos
+    public boolean conHijos()
+    {
+    	if ((left() != null) || (right != null)) {
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    //Comprueba si esta vacio el arbol
+    protected boolean isEmpty()
+    {
+        return valor == null;
+    }
+    
+    //girar el arbol hacia la derecha sobre el nodo que lo llamo
+    protected BinaryTree<E> girarDer()
+    {
+        BinaryTree<E> raiz = left();
+        
+        if(raiz == null) {
+        	return this;
+        }
+        
+        BinaryTree<E> padreTemp = this.parent();
+        boolean izquierdo = this.hijoIzq();
+        setLeft(raiz.right());
+        raiz.setRight(this);
+        
+        if(padreTemp != null)
+        {
+            if(izquierdo) { 
+            	padreTemp.setLeft(raiz);
+            }
+            else {
+            	padreTemp.setRight(raiz);
+            }
+        }
+        else {
+        	raiz.setParent(null);
+        }
+        return raiz;
+    }
+    
+    //girar el arbol hacia la izquierda sobre el nodo que lo llamo
+    protected BinaryTree<E> rotateLeft()
+    {
+        BinaryTree<E> raiz = this.right();
+        
+        if(raiz == null) {
+        	return this;
+        }
+        
+        BinaryTree<E> padreTemp = this.parent();
+        boolean izquierdo = this.hijoIzq();
+        setRight(raiz.left());
+        raiz.setLeft(this);
+        
+        if(padreTemp != null)
+        {
+            if(izquierdo) padreTemp.setLeft(raiz);
+            else padreTemp.setRight(raiz);
+        }
+        else {
+        	raiz.setParent(null);
+        }
+        return raiz;
+    }
+    
+    //gets
+    public BinaryTree<E> left() { 
+    	return left; 
+    }
+    
+    public BinaryTree<E> right() { 
+    	return right;
+    }
+    
+    public BinaryTree<E> parent() {
+    	return parent; 
+    }
+    
+    public E valor() { 
+    	return valor; 
+    }
+    
+    //sets
+    public void setLeft(BinaryTree<E> newLeft) 
+    {
+        left = newLeft;
+        newLeft.setParent(this);
+    }
+
+    public void setvalor(E newvalor) { 
+    	valor = newvalor; 
+    }
+    
+    public void setRight(BinaryTree<E> newRight)
+    {
+        right = newRight;
+        newRight.setParent(this);
+    }
+    
+    protected void setParent(BinaryTree<E> newParent) 
+    {
+        parent = newParent;
+    }
 }

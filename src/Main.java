@@ -20,6 +20,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class Main {
 	public static void main(String[] args) throws IOException {
+		
 		Scanner teclado = new Scanner(System.in);
 		/*ArrayList para las palabras del diccionario*/
 		ArrayList<String> diccionario = new ArrayList<String>();
@@ -29,10 +30,48 @@ public class Main {
 		String traducido = "";
 		String dirrección="";
 		
+		
+		try
+        {
+			Scanner contDiccionario = new Scanner(new BufferedReader(new FileReader("src/freedict-eng-spa.dic")));
+			 while(contDiccionario.hasNextLine())
+	            {
+	                String lineaTemporal = contDiccionario.nextLine();
+	                //Se quitan las tabulaciones que tiene el diccionario
+	                String[] lineaTab = lineaTemporal.split("\t");
+	                //Se quitan los punto y coma entre palabras
+	                String[] primerSignificado = lineaTab[1].split(";");
+	                System.out.println(lineaTab[0]+"  "+primerSignificado[0]);
+	            }
+        }
+		catch (FileNotFoundException ex) 
+        {
+			System.out.println("Error al abrir el archivo");
+        }
+		
+        System.out.println("Seleccione el mapa que desea utilizar: \n1.Red Black Tree \n2.Splay Tree");
+		String opcion = teclado.nextLine();
+		
+		/*
+		if (opcion.equals("1"))
+		{
+			construirRedBlackTree();
+		}
+		else 
+		{
+			if (opcion.equals("2"))
+			{
+				construirSplay();
+			}
+			else {
+				System.out.println("Ingrese solamente el número del arbol que desea");
+			}
+		}
+		/*
 		System.out.println("Seleccione el archivo que tenga el diccionario");
 		teclado.nextLine();
 		
-		/*Escogemos el archivo con el diccionario*/
+		//Escogemos el archivo con el diccionario
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("./src"));
 		chooser.setDialogTitle("Seleccione el archivo que desea");
@@ -41,17 +80,17 @@ public class Main {
 		int valor = chooser.showOpenDialog(null);
 		if(valor == JFileChooser.APPROVE_OPTION) {
 			try {
-				/*Leemos el archivo de texto*/
+				//Leemos el archivo de texto
 				FileInputStream stream = new FileInputStream(chooser.getSelectedFile().getAbsolutePath());
 				BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 				
 				String linea;
 				while((linea = reader.readLine()) != null) {
-					/*Agregamos la línea al diccionario*/
+					//Agregamos la línea al diccionario
 					diccionario.add(linea);
 				}
 				
-				/*Separamos las lineas del archivo para lograr hacer la asociacion*/
+				//Separamos las lineas del archivo para lograr hacer la asociacion
 				for(int i = 0; i<diccionario.size(); i++) {
 					String datos = diccionario.get(i).substring(i, diccionario.get(i).length() - 1);
 					String[] unicornio = datos.split("");
@@ -85,7 +124,7 @@ public class Main {
         {
             BufferedReader informacion = new BufferedReader(new FileReader(dirrección));  // Abre documento para su lectura
             String rawText = informacion.readLine();  // Lee la unica linea y la guarda como string
-            /*en caso de punto al final*/
+            //en caso de punto al final
             rawText = rawText.substring(0, rawText.length()-1);
             String textoATraducir = rawText.toLowerCase();
             informacion.close();  // Se finaliza el lector
@@ -93,7 +132,7 @@ public class Main {
             String wIngles, wEspanol;	
             StringTokenizer st = new StringTokenizer (textoATraducir);
 
-            /* traduce las palabras*/
+            // traduce las palabras
             while (st.hasMoreTokens())
             {
                 wIngles = st.nextToken();
@@ -117,9 +156,8 @@ public class Main {
         System.out.println("\nLas palbras entre astericos, son las que no estan en el diccionario");
         System.out.println("Palabras dentro del diccionario utlizado (inOrder): \n");
         palabra.display(palabra.root);
-
+        */
 
 		
 	}
-
 }

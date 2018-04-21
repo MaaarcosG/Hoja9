@@ -16,9 +16,36 @@ public class Association<K extends Comparable<K>, V> implements Map.Entry<K,V> {
 	 * Constructor de la clase
 	 */
 	public Association(K k, V v) {
+		assert (key != null);
 		k = key;
 		v = value;
 	}
+	
+	 /**
+     * @param k
+     * 
+     */
+    public Association(K key)
+    {
+        this(key,null);
+    }
+    
+    /**
+     * @param otra asociasion.
+     * @return devuelve true si las key son iguales.
+     */
+    public boolean equals(Object other)
+    {
+        Association otherAssoc = (Association)other;
+        return getKey().equals(otherAssoc.getKey());
+    }
+    
+    public String toString()
+    {
+        StringBuffer s = new StringBuffer();
+        s.append(" - "+getKey()+": "+getValue()+"\n");
+        return s.toString();
+    }
 	
 	/**
 	 * @return key
@@ -50,10 +77,10 @@ public class Association<K extends Comparable<K>, V> implements Map.Entry<K,V> {
 	}
 	
 	/**
-	 * @param o
-	 * @return o.getKey();
+	 * @param key es la llave de la asociacion
+	 * @return devuelve mayor a cero si es mas grande, 0 si son iguales, y menor a cero si es menor
 	 */
 	public int compareTo(K key) {
-		return key.compareTo(key);
+		return this.key.compareTo(key);
 	}
 }
